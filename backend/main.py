@@ -18,7 +18,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60
 # ================= APP ===================
 
 app = FastAPI()
-# ================= CORS ==================
+# ================= CORS ======================
 
 app.add_middleware(
     CORSMiddleware,
