@@ -6,6 +6,7 @@ import View from "./pages/View";
 import ViewResult from "./pages/ViewResult";
 import AdminLogin from "./pages/AdminLogin";
 import CreateUser from "./pages/CreateUser";
+import EditNote  from "./pages/EditNote";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/write" element={<Write />} />
         <Route path="/view" element={<View />} />
         <Route path="/view-result" element={<ViewResult />} />
+        <Route path="/edit/:id" element={<EditNote />} />
       </Routes>
     </BrowserRouter>
   );

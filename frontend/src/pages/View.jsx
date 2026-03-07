@@ -19,8 +19,8 @@ export default function View() {
     // Navigate to result page with selected dates
     navigate("/view-result", {
       state: {
-        fromDate,
-        toDate,
+        fromDate: fromDate.toISOString().split("T")[0],
+        toDate: toDate.toISOString().split("T")[0],
       },
     });
   };

@@ -8,18 +8,45 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = () => {
-    if (username === "teacher" && password === "1234") {
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("username", username);
-      navigate("/dashboard");
-    } else {
-      alert("Invalid username or password");
+  const handleLogin = async () => {
+  try {
+    const res = await fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Invalid credentials");
     }
+
+    const data = await res.json();
+
+    localStorage.setItem("token", data.access_token);
+    // localStorage.setItem("username", JSON.stringify(res.data.username));
+
+    navigate("/dashboard");
+  } catch (err) {
+    alert("Invalid username or password");
+  }
+};
+
+  const handleClick = () => {
+    navigate("/auth/login");   // open admin page
   };
 
   return (
     <div className="login-page">
+    <div className="profile-container">
+      <div className="profile-icon" onClick={handleClick}>
+        👤
+      </div>
+      <h2>Admin</h2>
+    </div>
+
+    
       <div className="login-card">
         <div className="icon">👤</div>
         <h2>Welcome to Teacher Support AI</h2>

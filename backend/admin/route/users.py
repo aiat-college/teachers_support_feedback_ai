@@ -14,6 +14,8 @@ def create_user(
     password: str = Form(...),
     full_name: str = Form(...),
     phonenumber: str = Form(...),
+    school: str = Form(...),
+    grade: str = Form(...),
     photo: UploadFile = File(None)
 ):
     db = SessionLocal()
@@ -32,6 +34,8 @@ def create_user(
         full_name=full_name,
         phonenumber = phonenumber,
         photo_path=photo_path,
+        school=school,
+        grade=grade,
         role="user"
     )
 

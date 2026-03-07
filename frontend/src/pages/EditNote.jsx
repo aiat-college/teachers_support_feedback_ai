@@ -36,7 +36,13 @@ export default function EditNote() {
 
     try {
 
-      const res = await fetch(`http://127.0.0.1:8000/notes/${id}`);
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(`http://127.0.0.1:8000/notes/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       const data = await res.json();
 
       setForm(data);
@@ -71,16 +77,16 @@ export default function EditNote() {
 
     try {
 
-      const res = await fetch(
-        `http://127.0.0.1:8000/notes/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(form)
-        }
-      );
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(`http://127.0.0.1:8000/notes/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(form)
+      });
 
       if (res.ok) {
 

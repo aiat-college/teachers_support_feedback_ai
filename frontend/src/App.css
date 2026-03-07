@@ -29,6 +29,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .login-card {
@@ -133,6 +134,30 @@ button {
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
+}
+
+.login-page {
+  position: relative;
+  z-index: 1;
+}
+
+.profile-container {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+}
+
+.profile-icon {
+  font-size: 28px;
+  cursor: pointer;
+  background: white;
+  padding: 6px 10px;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.profile-icon:hover {
+  background: #eee;
 }
 
 /* ======================
@@ -318,6 +343,7 @@ button {
   margin-bottom: 16px;
   font-size: 18px;
   font-weight: 600;
+  color: #111;
 }
 
 /* GRID layout (2 cards per row) */
@@ -362,11 +388,6 @@ button {
 /* ======================
    WRITE NOTES PAGE
 ====================== */
-.write-page {
-  min-height: 100vh;
-  background: #f5f7fb;
-  padding: 20px;
-}
 
 .write-header {
   margin-bottom: 16px;
@@ -452,11 +473,26 @@ button {
 ====================== */
 
 .write-page {
+  min-height: 100vh;
   max-width: 800px;
   margin: 30px auto;
   background: white;
   padding: 24px;
   border-radius: 14px;
+}
+
+/* FIX WRITE PAGE TEXT VISIBILITY */
+
+.write-page input,
+.write-page textarea {
+  background: #ffffff;
+  color: #111;          /* Dark text */
+  border: 1px solid #ccc;
+}
+
+.write-page textarea::placeholder,
+.write-page input::placeholder {
+  color: #666;
 }
 
 .write-title {
@@ -495,6 +531,7 @@ button {
   display: block;
   margin-bottom: 6px;
   font-weight: 600;
+  color: #000;
 }
 
 .form-group textarea {
@@ -639,22 +676,30 @@ button {
    VIEW RESULT TABLE
 ====================== */
 
+.table-wrapper {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
 .notes-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+  margin-top: 20px;
+  color: #111;
 }
 
 .notes-table th,
 .notes-table td {
-  border: 1px solid #aaa;
+  border: 1px solid #ccc;
   padding: 8px;
   text-align: left;
   vertical-align: top;
+  color: #111;
 }
 
 .notes-table th {
-  background: #e5e7eb;
+  background: #f1f5f9;
   font-weight: 600;
 }
 

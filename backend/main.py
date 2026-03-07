@@ -3,8 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-
+from backend.admin.route import auth, users
+from backend.db.pgdatabase import Base,engine,SessionLocal
+from backend.models.models import User,Note as NoteModel
+from backend.admin.security import verify_password, create_access_token
 from pydantic import BaseModel
+
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
 import psycopg2
@@ -34,6 +38,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FRONTEND_PATH = os.path.join(BASE_DIR, "../frontend/dist")
 # ================= SERVE FRONTEND =================
 
+Base.metadata.create_all(bind=engine)
+
 # Serve assets
 if os.path.exists(FRONTEND_PATH):
 
@@ -48,24 +54,35 @@ if os.path.exists(FRONTEND_PATH):
 def serve_frontend():
     return FileResponse(os.path.join(FRONTEND_PATH, "index.html"))
 
-# ================= DATABASE =================
-
-def get_db():
-    return psycopg2.connect(
-        host="localhost",
-        database="TeacherNotes",
-        user="postgres",
-        password="aiat"
-    )
-
 # ================= AUTH =================
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
+class NoteCreate(BaseModel):
+    school: str
+    grade: str
+    what_i_prepared: str
+    what_i_did_well: str
+    what_went_well: str
+    where_to_improve: str
+    created_date: str
+    what_homework_did_i_give: str
 
-fake_users_db = {
-    "teacher": {"username": "teacher", "password": "1234"}
-}
+class NoteResponse(BaseModel):
+    id: int
+    username: str
+    school: str
+    grade: str
+    what_i_prepared: str
+    what_i_did_well: str
+    what_went_well: str
+    where_to_improve: str
+    created_date: str
+    what_homework_did_i_give: str
+
+    class Config:
+        from_attributes = True  # IMPORTANT for SQLAlchemy
+
 
 
 class LoginRequest(BaseModel):
@@ -101,274 +118,160 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or expired token"
         )
+    
+#================== AUTH  =================
+
+app.include_router(auth.router, prefix="/auth", tags=["Auth"])
+app.include_router(users.router, prefix="/users", tags=["Users"])
 
 # ================= LOGIN =================
 
 @app.post("/login")
 def login(data: LoginRequest):
 
-    user = fake_users_db.get(data.username)
+    db = SessionLocal()
+    user = db.query(User).filter(User.username == data.username).first()
 
-    if not user or user["password"] != data.password:
+    if not user or not verify_password(data.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    token = create_access_token({"sub": user["username"]})
+    if user.role != "user":
+        raise HTTPException(status_code=403, detail="Not an admin")
 
-    return {
-        "access_token": token,
-        "token_type": "bearer",
-        "username": user["username"]
-    }
+    token = create_access_token({"sub": user.username, "role": user.role})
+    return {"access_token": token}
 
 
 @app.get("/dashboard")
 def dashboard(user: str = Depends(get_current_user)):
 
-    return {"message": f"Welcome {user}"}
+    db = SessionLocal()
 
- 
-# ================= NOTE MODEL =================
+    db_user = db.query(User).filter(User.username == user).first()
 
-class Note(BaseModel):
 
-    username: str
-    school: str
-    grade: str
-    what_i_prepared: str
-    what_i_did_well: str
-    what_went_well: str
-    where_to_improve: str
-    created_date: str
-    user_id: int
-    what_homework_did_i_give: str
-
+    return {
+        "username": db_user.full_name,
+        "profile_image": db_user.photo_path   # stored image path
+    }
 
 # ================= SAVE =================
 
-@app.post("/save")
-def save_note(note: Note):
+@app.post("/write")
+def save_note(note: NoteCreate, user: str = Depends(get_current_user)):
 
-    conn = get_db()
-    cur = conn.cursor()
+    db = SessionLocal()
 
-    cur.execute("""
-        INSERT INTO teacher_notes (
-            username,
-            school,
-            grade,
-            what_i_prepared,
-            what_i_did_well,
-            what_went_well,
-            where_to_improve,
-            created_date,
-            user_id,
-            what_homework_did_i_give
-        )
-        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-    """, (
-        note.username,
-        note.school,
-        note.grade,
-        note.what_i_prepared,
-        note.what_i_did_well,
-        note.what_went_well,
-        note.where_to_improve,
-        note.created_date,
-        note.user_id,
-        note.what_homework_did_i_give
-    ))
+    db_user = db.query(User).filter(User.username == user).first()
 
-    conn.commit()
-    cur.close()
-    conn.close()
+    new_note = NoteModel(
+        username=user,
+        user_id=db_user.id,
+        school=note.school,
+        grade=note.grade,
+        what_i_prepared=note.what_i_prepared,
+        what_i_did_well=note.what_i_did_well,
+        what_went_well=note.what_went_well,
+        where_to_improve=note.where_to_improve,
+        created_date=note.created_date,
+        what_homework_did_i_give=note.what_homework_did_i_give
+    )
+
+    db.add(new_note)
+    db.commit()
+    db.refresh(new_note)
 
     return {"message": "Saved Successfully"}
 
 
 # ================= GET ALL =================
 
-@app.get("/notes")
-def get_all_notes():
+@app.get("/notes", response_model=list[NoteResponse])
+def get_all_notes(user: str = Depends(get_current_user)):
 
-    conn = get_db()
-    cur = conn.cursor()
-
-    cur.execute("""
-        SELECT *
-        FROM teacher_notes
-        ORDER BY created_date DESC, id DESC
-    """)
-
-    rows = cur.fetchall()
-
-    cur.close()
-    conn.close()
-
-    result = []
-
-    for r in rows:
-
-        result.append({
-            "id": r[0],
-            "username": r[1],
-            "school": r[2],
-            "grade": r[3],
-            "what_i_prepared": r[4],
-            "what_i_did_well": r[5],
-            "what_went_well": r[6],
-            "where_to_improve": r[7],
-            "created_date": str(r[8]),
-            "user_id": r[9],
-            "what_homework_did_i_give": r[10]
-        })
-
-    return result
+    db = SessionLocal()
+    notes = db.query(NoteModel).order_by(NoteModel.created_date.desc()).all()
+    return notes
 
 
 # ================= DATE FILTER =================
 
-@app.get("/notes-by-date")
-def get_notes_by_date(from_date: str, to_date: str):
+@app.get("/notes-by-date", response_model=list[NoteResponse])
+def get_notes_by_date(from_date: str, to_date: str,user: str = Depends(get_current_user)):
 
-    conn = get_db()
-    cur = conn.cursor()
+    db = SessionLocal()
 
-    cur.execute("""
-        SELECT *
-        FROM teacher_notes
-        WHERE created_date BETWEEN %s AND %s
-        ORDER BY created_date DESC
-    """, (from_date, to_date))
+    db_user = db.query(User).filter(User.username == user).first()
 
-    rows = cur.fetchall()
+    notes = db.query(NoteModel).filter(
+        NoteModel.created_date.between(from_date, to_date)
+    ).order_by(NoteModel.created_date.desc()).all()
 
-    cur.close()
-    conn.close()
-
-    result = []
-
-    for r in rows:
-
-        result.append({
-            "id": r[0],
-            "username": r[1],
-            "school": r[2],
-            "grade": r[3],
-            "what_i_prepared": r[4],
-            "what_i_did_well": r[5],
-            "what_went_well": r[6],
-            "where_to_improve": r[7],
-            "created_date": str(r[8]),
-            "user_id": r[9],
-            "what_homework_did_i_give": r[10]
-        })
-
-    return result
+    return notes
 
 
 # ================= GET ONE =================
 
-@app.get("/notes/{id}")
-def get_note(id: int):
+@app.get("/notes/{id}", response_model=NoteResponse)
+def get_note(id: int, user: str = Depends(get_current_user)):
 
-    conn = get_db()
-    cur = conn.cursor()
+    db = SessionLocal()
 
-    cur.execute("SELECT * FROM teacher_notes WHERE id=%s", (id,))
+    db_note = db.query(NoteModel).filter(NoteModel.id == id).first()
 
-    r = cur.fetchone()
+    if not db_note:
+        raise HTTPException(status_code=404, detail="Note not found")
 
-    cur.close()
-    conn.close()
-
-    if not r:
-        return {"error": "Not found"}
-
-    return {
-        "id": r[0],
-        "username": r[1],
-        "school": r[2],
-        "grade": r[3],
-        "what_i_prepared": r[4],
-        "what_i_did_well": r[5],
-        "what_went_well": r[6],
-        "where_to_improve": r[7],
-        "created_date": str(r[8]),
-        "user_id": r[9],
-        "what_homework_did_i_give": r[10]
-    }
+    
+    return db_note
 
 
 # ================= UPDATE (7 DAYS LIMIT) =================
 
 @app.put("/notes/{id}")
-def update_note(id: int, note: Note):
+def update_note(id: int, note: NoteCreate, user: str = Depends(get_current_user)):
 
-    conn = get_db()
-    cur = conn.cursor()
+    db = SessionLocal()
 
-    cur.execute(
-        "SELECT created_date FROM teacher_notes WHERE id=%s", (id,)
-    )
+    db_note = db.query(NoteModel).filter(NoteModel.id == id).first()
 
-    row = cur.fetchone()
+    if not db_note:
+        raise HTTPException(status_code=404, detail="Note not found")
 
-    if not row:
-        return {"error": "Not found"}
-
-    created = datetime.strptime(str(row[0]), "%Y-%m-%d")
+    created = datetime.strptime(str(db_note.created_date), "%Y-%m-%d")
 
     if datetime.now() - created > timedelta(days=7):
-        return {"error": "Edit expired (7 days limit)"}
+        raise HTTPException(status_code=400, detail="Edit expired (7 days limit)")
 
-    cur.execute("""
-        UPDATE teacher_notes
-        SET
-            username=%s,
-            school=%s,
-            grade=%s,
-            what_i_prepared=%s,
-            what_i_did_well=%s,
-            what_went_well=%s,
-            where_to_improve=%s,
-            created_date=%s,
-            user_id=%s,
-            what_homework_did_i_give=%s
-        WHERE id=%s
-    """, (
-        note.username,
-        note.school,
-        note.grade,
-        note.what_i_prepared,
-        note.what_i_did_well,
-        note.what_went_well,
-        note.where_to_improve,
-        note.created_date,
-        note.user_id,
-        note.what_homework_did_i_give,
-        id
-    ))
+    db_note.school = note.school
+    db_note.grade = note.grade
+    db_note.what_i_prepared = note.what_i_prepared
+    db_note.what_i_did_well = note.what_i_did_well
+    db_note.what_went_well = note.what_went_well
+    db_note.where_to_improve = note.where_to_improve
+    db_note.created_date = note.created_date
+    db_note.what_homework_did_i_give = note.what_homework_did_i_give
 
-    conn.commit()
-    cur.close()
-    conn.close()
+    db.commit()
+    db.refresh(db_note)
 
-    return {"message": "Updated"}
+    return {"message": "Updated successfully"}
 
 
 # ================= DELETE =================
 
 @app.delete("/notes/{id}")
-def delete_note(id: int):
+def delete_note(id: int, user: str = Depends(get_current_user)):
 
-    conn = get_db()
-    cur = conn.cursor()
+    db = SessionLocal()
 
-    cur.execute("DELETE FROM teacher_notes WHERE id=%s", (id,))
+    note = db.query(NoteModel).filter(NoteModel.id == id).first()
 
-    conn.commit()
-    cur.close()
-    conn.close()
+    if not note:
+        raise HTTPException(status_code=404, detail="Not found")
+
+    db.delete(note)
+    db.commit()
 
     return {"message": "Deleted"}
 

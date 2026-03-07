@@ -1,4 +1,6 @@
 import { useNavigate, NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import {
   FaTachometerAlt,
   FaBook,
@@ -8,9 +10,40 @@ import {
 } from "react-icons/fa";
 import "../App.css";
 
+
 export default function Dashboard() {
-  const navigate = useNavigate();
-  const username = localStorage.getItem("username") || "Teacher";
+
+const navigate = useNavigate();
+
+const [user, setUser] = useState({
+username: "",
+profile_image: ""
+});
+
+useEffect(() => {
+  
+
+const fetchUser = async () => {
+  try {
+
+    const token = localStorage.getItem("token");
+
+    const res = await axios.get("http://localhost:8000/dashboard", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    setUser(res.data);
+
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+fetchUser();
+
+}, []);
 
   return (
     <div className="dashboard-page">
@@ -20,33 +53,25 @@ export default function Dashboard() {
 
         <nav>
           <NavLink
-            to="/dashboard"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
+            to="/dashboard">
             <FaTachometerAlt className="nav-icon" />
             Dashboard
           </NavLink>
 
           <NavLink
-            to="/lesson-planner"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
+            to="/lesson-planner">
             <FaBook className="nav-icon" />
             Lesson Planner
           </NavLink>
 
           <NavLink
-            to="/homework"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
+            to="/homework">
             <FaClipboardCheck className="nav-icon" />
             Homework Analysis
           </NavLink>
 
           <NavLink
-            to="/student-progress"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
+            to="/student-progress">
             <FaChartLine className="nav-icon" />
             Student Progress
           </NavLink>
@@ -67,15 +92,25 @@ export default function Dashboard() {
       {/* ================= MAIN ================= */}
       <main className="dashboard-main">
         <div className="dashboard-header">
-          <h2>Welcome, {username}</h2>
-          <div className="profile">👤</div>
+          <h2>Welcome, {user.username}</h2>
+          <div className="profile">
+          {user.profile_image ? (
+            <img
+              src={`http://localhost:8000/${user.profile_image}`}
+              alt="profile"
+              style={{ width: "36px", height: "36px", borderRadius: "50%" }}
+            />
+          ) : (
+            "👤"
+          )}
+        </div>
         </div>
 
         {/* ================= CONTENT ================= */}
         <div>
-          {/* BIAT */}
+          {/* AIAT */}
           <div className="section">
-            <div className="section-title">BIAT</div>
+            <div className="section-title">AIAT</div>
 
             <div className="grid">
               <div className="grid-card">
