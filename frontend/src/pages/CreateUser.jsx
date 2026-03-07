@@ -9,9 +9,10 @@ export default function CreateUser() {
     password: "",
     full_name: "",
     phonenumber: "",
-    school:"",
-    grade:"",
     photo: null,
+    classes: [
+    { school: "", grade: "" }
+  ]
   });
 
   const [loading, setLoading] = useState(false);
@@ -26,6 +27,32 @@ export default function CreateUser() {
     }
   };
 
+  const handleClassChange = (index, field, value) => {
+  const updated = [...form.classes];
+  updated[index][field] = value;
+
+  setForm({
+    ...form,
+    classes: updated
+  });
+};
+
+const addClass = () => {
+  setForm({
+    ...form,
+    classes: [...form.classes, { school: "", grade: "" }]
+  });
+};
+
+const removeClass = (index) => {
+  const updated = form.classes.filter((_, i) => i !== index);
+
+  setForm({
+    ...form,
+    classes: updated
+  });
+};
+
   const submit = async () => {
     try {
       setLoading(true);
@@ -37,6 +64,11 @@ export default function CreateUser() {
         return;
       }
 
+      if (form.classes.some(c => !c.school || !c.grade)) {
+      alert("Please select school and grade for all classes");
+      return;
+    }
+
       const data = new FormData();
 
       data.append("username", form.username);
@@ -44,8 +76,8 @@ export default function CreateUser() {
       data.append("password", form.password);
       data.append("full_name", form.full_name);
       data.append("phonenumber", form.phonenumber);
-      data.append("school", form.school);
-      data.append("grade", form.grade);
+
+      data.append("classes", JSON.stringify(form.classes));
 
       if (form.photo) {
         data.append("photo", form.photo);
@@ -71,6 +103,7 @@ export default function CreateUser() {
         full_name: "",
         phonenumber: "",
         photo: null,
+        classes: [{ school: "", grade: "" }]
       });
 
     } catch (err) {
@@ -134,29 +167,52 @@ export default function CreateUser() {
 
       <br /><br />
 
-<select name="school" value={form.school} onChange={handleChange}>
-  <option value="">Select School</option>
-  <option value="AIAT">AIAT</option>
-  <option value="UDAVI">UDAVI</option>
-  <option value="ISAIAMBLAM">ISAIAMBLAM</option>
-</select>
+{form.classes.map((cls, index) => (
+  <div key={index} style={{border:"1px solid #ccc", padding:"10px", marginBottom:"10px"}}>
 
-<br /><br />
+    <select
+      value={cls.school}
+      onChange={(e) =>
+        handleClassChange(index, "school", e.target.value)
+      }
+    >
+      <option value="">Select School</option>
+      <option value="AIAT">AIAT</option>
+      <option value="UDAVI">UDAVI</option>
+      <option value="ISAIAMBLAM">ISAIAMBLAM</option>
+    </select>
 
-<select name="grade" value={form.grade} onChange={handleChange}>
-  <option value="">Select Grade</option>
-  <option value="6">Grade 6</option>
-  <option value="7">Grade 7</option>
-  <option value="8">Grade 8</option>
-  <option value="9">Grade 9</option>
-  <option value="10">Grade 10</option>
-  <option value="I-year">I-year</option>
-   <option value="II-year">II-year</option>
-    <option value="III-year">III-year</option>
-</select>
+    <br /><br />
 
-      <br /><br />
+    <select
+      value={cls.grade}
+      onChange={(e) =>
+        handleClassChange(index, "grade", e.target.value)
+      }
+    >
+      <option value="">Select Grade</option>
+      <option value="6">Grade 6</option>
+      <option value="7">Grade 7</option>
+      <option value="8">Grade 8</option>
+      <option value="9">Grade 9</option>
+      <option value="10">Grade 10</option>
+      <option value="I-year">I-year</option>
+      <option value="II-year">II-year</option>
+      <option value="III-year">III-year</option>
+    </select>
 
+    <br /><br />
+
+    {index !== 0 && (
+      <button onClick={() => removeClass(index)}>
+        Remove
+      </button>
+    )}
+
+  </div>
+))}
+
+<button onClick={addClass}>+ Add Another Class</button>
       <input
         type="file"
         name="photo"

@@ -11,10 +11,17 @@ class User(Base):
     password_hash = Column(String, nullable=False)
     full_name = Column(String)
     phonenumber = Column(String)
-    school = Column(String)
-    grade = Column(String)
     photo_path = Column(String)
     role = Column(String, default="user")  # admin / user
+
+
+class UserClass(Base):
+    __tablename__ = "user_classes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer)
+    school = Column(String)
+    grade = Column(String)
     
 
 # ================= NOTE MODEL =================

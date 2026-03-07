@@ -17,7 +17,8 @@ const navigate = useNavigate();
 
 const [user, setUser] = useState({
 username: "",
-profile_image: ""
+profile_image: "",
+classes:[]
 });
 
 useEffect(() => {
@@ -44,6 +45,16 @@ const fetchUser = async () => {
 fetchUser();
 
 }, []);
+
+const groupedClasses = user.classes.reduce((acc, cls) => {
+  if (!acc[cls.school]) {
+    acc[cls.school] = [];
+  }
+
+  acc[cls.school].push(cls.grade);
+
+  return acc;
+}, {});
 
   return (
     <div className="dashboard-page">
@@ -108,93 +119,53 @@ fetchUser();
 
         {/* ================= CONTENT ================= */}
         <div>
-          {/* AIAT */}
-          <div className="section">
-            <div className="section-title">AIAT</div>
+  {Object.entries(groupedClasses).map(([school, grades]) => (
 
-            <div className="grid">
-              <div className="grid-card">
-                <h4>1st Year</h4>
-                <div className="actions">
-                  <button
-                    className="btn-light"
-                    onClick={() => navigate("/write")}
-                  >
-                    Write
-                  </button>
-                    <button
-                      type="button"
-                      className="btn-primary"
-                      onClick={() => navigate("/view")}
-                    >
-                      View
-                    </button>
-                </div>
-              </div>
+    <div className="section" key={school}>
 
-              <div className="grid-card">
-                <h4>2nd Year</h4>
-                <div className="actions">
-                  <button
-                    className="btn-light"
-                    onClick={() => navigate("/write")}
-                  >
-                    Write
-                  </button>
-                  <button
-                    className="btn-primary"
-                    onClick={() => navigate("/view")}
-                  >
-                    View
-                  </button>
-                </div>
-              </div>
+      <div className="section-title">{school}</div>
+
+      <div className="grid">
+
+        {grades.map((grade) => (
+
+          <div className="grid-card" key={grade}>
+
+            <h4>{grade}</h4>
+
+            <div className="actions">
+
+              <button
+                className="btn-light"
+                onClick={() =>
+                  navigate(`/write?school=${school}&grade=${grade}`)
+                }
+              >
+                Write
+              </button>
+
+              <button
+                className="btn-primary"
+                onClick={() =>
+                  navigate(`/view?school=${school}&grade=${grade}`)
+                }
+              >
+                View
+              </button>
+
             </div>
+
           </div>
 
-          {/* UDAVI */}
-          <div className="section">
-            <div className="section-title">Udavi</div>
+        ))}
 
-            <div className="grid">
-              <div className="grid-card">
-                <h4>11th Std</h4>
-                <div className="actions">
-                  <button
-                    className="btn-light"
-                    onClick={() => navigate("/write")}
-                  >
-                    Write
-                  </button>
-                  <button
-                    className="btn-primary"
-                    onClick={() => navigate("/view")}
-                  >
-                    View
-                  </button>
-                </div>
-              </div>
+      </div>
 
-              <div className="grid-card">
-                <h4>5th Std</h4>
-                <div className="actions">
-                  <button
-                    className="btn-light"
-                    onClick={() => navigate("/write")}
-                  >
-                    Write
-                  </button>
-                  <button
-                    className="btn-primary"
-                    onClick={() => navigate("/view")}
-                  >
-                    View
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    </div>
+
+  ))}
+</div>
+        
       </main>
     </div>
   );

@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from backend.admin.route import auth, users
 from backend.db.pgdatabase import Base,engine,SessionLocal
-from backend.models.models import User,Note as NoteModel
+from backend.models.models import User,Note as NoteModel, UserClass
 from backend.admin.security import verify_password, create_access_token
 from pydantic import BaseModel
 
@@ -149,10 +149,18 @@ def dashboard(user: str = Depends(get_current_user)):
 
     db_user = db.query(User).filter(User.username == user).first()
 
+    classes = db.query(UserClass).filter(
+        UserClass.user_id == db_user.id
+    ).all()
+
 
     return {
         "username": db_user.full_name,
-        "profile_image": db_user.photo_path   # stored image path
+        "profile_image": db_user.photo_path,   # stored image path
+        "classes": [
+            {"school": c.school, "grade": c.grade}
+            for c in classes
+        ]
     }
 
 # ================= SAVE =================

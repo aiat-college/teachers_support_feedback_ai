@@ -358,6 +358,7 @@ button {
   background: #f9fafc;
   padding: 20px;
   border-radius: 12px;
+  color: #000;
 }
 
 /* Buttons inside cards */

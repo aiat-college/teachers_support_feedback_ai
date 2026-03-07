@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, UploadFile, File, Form
-from backend.models.models import User
+from backend.models.models import User, UserClass
 from backend.db.pgdatabase import SessionLocal
 from backend.admin.security import hash_password
 from backend.admin.dependency import admin_required
 import shutil, os
+import json
 
 router = APIRouter()
 
@@ -14,10 +15,11 @@ def create_user(
     password: str = Form(...),
     full_name: str = Form(...),
     phonenumber: str = Form(...),
-    school: str = Form(...),
-    grade: str = Form(...),
+    classes: str = Form(...),
     photo: UploadFile = File(None)
 ):
+    
+    classes = json.loads(classes)
     db = SessionLocal()
 
     photo_path = None
@@ -34,13 +36,22 @@ def create_user(
         full_name=full_name,
         phonenumber = phonenumber,
         photo_path=photo_path,
-        school=school,
-        grade=grade,
         role="user"
     )
 
     db.add(user)
     db.commit()
     db.refresh(user)
+
+    for c in classes:
+        user_class = UserClass(
+            user_id=user.id,
+            school=c["school"],
+            grade=c["grade"]
+        )
+
+        db.add(user_class)
+
+    db.commit()
 
     return {"message": "User created successfully"}
