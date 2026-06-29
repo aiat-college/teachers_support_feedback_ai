@@ -23,7 +23,7 @@ BASE_VECTORSTORE_PATH = "vectorstore"
 
 YOUTUBE_FAISS_PATH = os.path.join(
     BASE_VECTORSTORE_PATH,
-    "youtube_faiss"
+    "youtube"
 )
 
 os.makedirs(YOUTUBE_FAISS_PATH, exist_ok=True)

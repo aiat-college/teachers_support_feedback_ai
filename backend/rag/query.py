@@ -1,469 +1,273 @@
+# backend/rag/query.py
+from pathlib import Path
+import requests
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain_ollama import OllamaLLM
-
-from backend.rag.embeddings import get_embeddings
-from backend.rag.prompts import MENTOR_PROMPT
-
-import faiss
-import pickle
-import numpy as np
-import os
 import re
+import time
 
-# =====================================================
+from backend.rag.prompts import (
+    MENTOR_FEEDBACK_PROMPT,
+    KEYWORD_EXTRACTION_PROMPT,
+)
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
+)
+
+# =====================================
 # PATHS
-# =====================================================
+# =====================================
 
-BASE_VECTORSTORE_PATH = "vectorstore"
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-BOOKS_FAISS_PATH = os.path.join(BASE_VECTORSTORE_PATH, "books_faiss")
-FEEDBACK_FAISS_PATH = os.path.join(BASE_VECTORSTORE_PATH, "feedback_faiss")
-YOUTUBE_FAISS_PATH = os.path.join(BASE_VECTORSTORE_PATH, "youtube_faiss")
-WEB_FAISS_PATH = os.path.join(BASE_VECTORSTORE_PATH, "web_faiss")
+# =====================================
+# EMBEDDINGS
+# =====================================
 
-# =====================================================
-# TEXT FORMATTER
-# =====================================================
-def format_vertical_text(text):
+print("Loading embeddings...")
+# =====================================
+# LOAD VECTORSTORES
+# =====================================
 
-    # Remove extra spaces/newlines
-    text = re.sub(r"\s+", " ", text).strip()
+print("Loading vectorstores...")
 
-    # Display BOOK title separately
-    if text.startswith("BOOK:"):
-
-        first_newline = text.find("\n")
-
-        if first_newline != -1:
-
-            title = text[:first_newline].strip()
-            body = text[first_newline:].strip()
-
-            print(title)
-            print()
-
-            text = body
-
-    # Split into readable sentences
-    sentences = re.split(
-        r'(?<=[.!?])\s+',
-        text
-    )
-
-    for sentence in sentences:
-
-        sentence = sentence.strip()
-
-        if sentence:
-
-            print(sentence)
-            print()
-
-# =====================================================
-# LOAD EMBEDDINGS
-# =====================================================
-
-print("Loading Embeddings...")
-embeddings = get_embeddings()
-
-# =====================================================
-# LOAD FEEDBACK FAISS
-# =====================================================
-
-#print("Loading Feedback FAISS...")
-
-feedback_db = FAISS.load_local(
-    FEEDBACK_FAISS_PATH,
+books_index = FAISS.load_local(
+    str(BASE_DIR / "vectorstore" / "books"),
     embeddings,
     allow_dangerous_deserialization=True
 )
 
-# =====================================================
-# LOAD YOUTUBE FAISS
-# =====================================================
-
-#print("Loading YouTube FAISS...")
-
-youtube_db = FAISS.load_local(
-    YOUTUBE_FAISS_PATH,
+feedback_index = FAISS.load_local(
+    str(BASE_DIR / "vectorstore" / "feedback"),
     embeddings,
     allow_dangerous_deserialization=True
 )
 
-# =====================================================
-# LOAD WEB FAISS
-# =====================================================
 
-#print("Loading Web FAISS...")
-
-web_db = FAISS.load_local(
-    WEB_FAISS_PATH,
+#web_index = FAISS.load_local(
+    #str(BASE_DIR / "vectorstore" / "web"),
+    #embeddings,
+    #allow_dangerous_deserialization=True
+#)
+youtube_index = FAISS.load_local(
+    str(BASE_DIR / "vectorstore" / "youtube"),
     embeddings,
     allow_dangerous_deserialization=True
 )
+print("All vectorstores loaded successfully.")
 
-# =====================================================
-# LOAD BOOKS FAISS
-# =====================================================
+# =====================================
+# SEARCH
+# =====================================
 
-#print("Loading Books FAISS...")
+def search_index(vectorstore, query):
+    docs = vectorstore.similarity_search(query, k=2)
 
-books_index = faiss.read_index(
-    os.path.join(
-        BOOKS_FAISS_PATH,
-        "index.faiss"
+    return "\n\n".join(
+        doc.page_content[:1000]
+        for doc in docs
     )
-)
+# YOUTUBE RANKED SEARCH
+def search_youtube_ranked(vectorstore, query, k=5):
 
-with open(
-    os.path.join(
-        BOOKS_FAISS_PATH,
-        "index.pkl"
-    ),
-    "rb"
-) as f:
-
-    books_documents = pickle.load(f)
-
-print(f"Books vectors loaded: {books_index.ntotal}")
-print(f"Books documents loaded: {len(books_documents)}")
-
-# =====================================================
-# LOAD LLM
-# =====================================================
-
-#print("Loading Gemma...")
-
-llm = OllamaLLM(
-    model="gemma:2b"
-)
-
-#print("✅ GEMMA Ready")
-
-# =====================================================
-# TEACHER INPUT
-# =====================================================
-
-print("\n========== TEACHER REFLECTION ==========\n")
-
-prepared = input("1. What I prepared?\n> ")
-
-did_well = input(
-    "\n2. What I did well?\n> "
-)
-
-went_well = input(
-    "\n3. What went well?\n> "
-)
-
-improve = input(
-    "\n4. Where to improve?\n> "
-)
-
-homework = input(
-    "\n5. What homework did I give today?\n> "
-)
-
-# =====================================================
-# HANDLE EMPTY
-# =====================================================
-
-if not improve.strip():
-    improve = "Teacher did not identify improvement areas."
-
-if not homework.strip():
-    homework = "No homework assigned."
-
-# =====================================================
-# SEARCH QUERY
-# =====================================================
-
-search_query = f"""
-Topic:
-{prepared}
-
-Teaching Success:
-{did_well}
-
-Student Response:
-{went_well}
-
-Improvement:
-{improve}
-"""
-
-# =====================================================
-# RETRIEVE DOCS
-# =====================================================
-
-print("\nSearching Knowledge Base...\n")
-
-feedback_docs = []
-youtube_docs = []
-web_docs = []
-
-# ---------------- FEEDBACK ----------------
-
-try:
-
-    feedback_docs = feedback_db.similarity_search(
-        search_query,
-        k=3
+    docs_with_scores = vectorstore.similarity_search_with_score(
+        query,
+        k=k
     )
 
-except Exception as e:
+    print("\n===== RAW YOUTUBE SEARCH RESULTS =====")
+    print("Query:", query)
 
-    print(
-        "Feedback Retrieval Error:",
-        e
+    results = []
+
+    for doc, score in docs_with_scores:
+
+        print("\nScore:", score)
+        print(doc.page_content[:300])
+
+        results.append({
+            "content": doc.page_content,
+            "score": score
+        })
+
+    print("Total Results:", len(results))
+
+    return results
+
+
+# =====================================
+# CONTEXT RETRIEVAL
+# =====================================
+
+def retrieve_context(query):
+
+    books_context = search_index(
+        books_index,
+        query
+    )[:300]
+
+    feedback_context = search_index(
+        feedback_index,
+        query
+    )[:300]
+
+    youtube_results = search_youtube_ranked(
+        youtube_index,
+        query
     )
 
-# ---------------- YOUTUBE ----------------
-
-try:
-
-    youtube_docs = youtube_db.similarity_search(
-        search_query,
-        k=3
+    youtube_context = "\n\n".join(
+        item["content"][:250]
+        for item in youtube_results[:2]
     )
 
-except Exception as e:
+    context = f"""
+BOOKS:
+{books_context}
 
-    print(
-        "YouTube Retrieval Error:",
-        e
-    )
-
-# ---------------- WEB ----------------
-
-try:
-
-    web_docs = web_db.similarity_search(
-        search_query,
-        k=3
-    )
-
-except Exception as e:
-
-    print(
-        "Web Retrieval Error:",
-        e
-    )
-
-# =====================================================
-# BOOK SEARCH
-# =====================================================
-
-query_embedding = embeddings.embed_query(
-    search_query
-)
-
-query_vector = np.array(
-    [query_embedding],
-    dtype=np.float32
-)
-
-distances, indices = books_index.search(
-    query_vector,
-    10
-)
-
-best_book = None
-
-if len(indices[0]) > 0:
-
-    idx = indices[0][0]
-
-    if idx < len(books_documents):
-        best_book = books_documents[idx]
-
-# =====================================================
-# BUILD CONTEXT
-# =====================================================
-
-feedback_context = "\n".join(
-    [
-        doc.page_content[:700]
-        for doc in feedback_docs
-    ]
-)
-
-youtube_context = "\n".join(
-    [
-        doc.page_content[:700]
-        for doc in youtube_docs
-    ]
-)
-
-web_context = "\n".join(
-    [
-        doc.page_content[:700]
-        for doc in web_docs
-    ]
-)
-
-book_context = ""
-
-if best_book:
-
-    book_context = getattr(
-        best_book,
-        "page_content",
-        str(best_book)
-    )
-
-    if len(book_context) > 700:
-        book_context = book_context[:700]
-
-context = f"""
-FEEDBACK EXAMPLES:
+FEEDBACK:
 {feedback_context}
 
-BOOK PEDAGOGY REFERENCES:
-{book_context}
-
-YOUTUBE TEACHING VIDEOS:
+YOUTUBE:
 {youtube_context}
-
-WEB EDUCATIONAL RESOURCES:
-{web_context}
 """
 
-# =====================================================
-# QUESTION
-# =====================================================
+    print("Context Length:", len(context))
+    # print(prompt[:2000])
+    return context
+def extract_youtube_info(text):
 
-teacher_question = f"""
-What I prepared:
-{prepared}
+    title = "Unknown Title"
+    url = "No URL found"
 
-What I did well:
-{did_well}
+    title_match = re.search(r"Title:\s*(.*)", text)
+    url_match = re.search(r"(https?://[^\s]+)", text)
 
-What went well:
-{went_well}
+    if title_match:
+        title = title_match.group(1)
 
-Where to improve:
-{improve}
+    if url_match:
+        url = url_match.group(1)
 
-What homework did I give today:
-{homework}
+    return title, url
+
+def get_top_youtube_videos(vectorstore, query):
+
+    results = search_youtube_ranked(vectorstore, query)
+
+    # Keep only relevant results
+    filtered = []
+
+    for item in results:
+
+        score = item["score"]
+        print("SCORE =", item["score"])
+        # Adjust this value after testing
+        if score < 0.8:
+            filtered.append(item)
+
+    if not filtered:
+        return "No relevant videos found."
+
+    output = []
+
+    for item in filtered[:3]:
+
+        text = item["content"]
+
+        title, url = extract_youtube_info(text)
+
+        output.append(
+            f"🎥 {title}\n🔗 {url}"
+        )
+
+    return "\n\n".join(output)
+
+# =====================================
+# FEEDBACK GENERATION
+# =====================================
+def generate_teacher_feedback(
+    teacher,
+    teacher_entries,
+    notes_count
+):
+
+    print(f"Generating feedback for: {teacher}")
+
+    prompt = f"""
+{MENTOR_FEEDBACK_PROMPT}
+
+Teacher Name:
+{teacher}
+
+Notes Count:
+{notes_count}
+
+Teacher Reflection:
+{teacher_entries}
 """
 
-# =====================================================
-# PROMPT
-# =====================================================
+    print("\n===== PROMPT PREVIEW =====")
+    print(prompt[:3000])
 
-prompt = MENTOR_PROMPT.format(
-    context=context,
-    question=teacher_question
-)
-
-# =====================================================
-# GENERATE RESPONSE
-# =====================================================
-
-print(
-    "\nGenerating Mentor Feedback...\n"
-)
-
-response = llm.invoke(prompt)
-
-# =====================================================
-# DISPLAY FEEDBACK
-# =====================================================
-
-print(
-    "\n========== MENTOR FEEDBACK ==========\n"
-)
-
-print(response)
-
-# =====================================================
-# RESOURCE DISPLAY
-# =====================================================
-
-print(
-    "\n========== RECOMMENDED RESOURCES ==========\n"
-)
-
-resource_docs = []
-
-if best_book:
-    resource_docs.append(best_book)
-
-if youtube_docs:
-    resource_docs.append(youtube_docs[0])
-
-if web_docs:
-    resource_docs.append(web_docs[0])
-
-if not resource_docs:
-
-    print(
-        "No relevant resources found."
+    response = requests.post(
+        "http://localhost:11434/api/generate",
+        json={
+            "model": "phi3:latest",
+            "prompt": prompt,
+            "stream": False,
+            "options": {
+                "num_predict": 250,
+                "temperature": 0.3
+            }
+        },
+        timeout=300
     )
 
-else:
+    response.raise_for_status()
+    feedback = response.json()["response"].strip()
 
-    for i, doc in enumerate(
-        resource_docs,
-        start=1
-    ):
+    print("\n===== GENERATED FEEDBACK =====")
+    print(feedback)
 
-        print(
-            f"\nResource {i}"
-        )
+    return feedback
 
-        print("-" * 50)
+    return response.json()["response"]
+# =====================================
+# KEYWORD EXTRACTION
+# =====================================
 
-        if doc in youtube_docs:
+def extract_keywords(feedback):
 
-            print(
-                "🎥 YOUTUBE VIDEO RESOURCE"
-            )
+    print("\n===== EXTRACTING KEYWORDS =====")
 
-        elif doc in web_docs:
+    prompt = f"""
+{KEYWORD_EXTRACTION_PROMPT}
 
-            print(
-                "🌐 WEB RESOURCE"
-            )
+Mentor Feedback:
 
-        else:
+{feedback}
+"""
 
-            print(
-                "📘 BOOK RESOURCE"
-            )
+    response = requests.post(
+        "http://localhost:11434/api/generate",
+        json={
+            "model": "phi3:latest",
+            "prompt": prompt,
+            "stream": False,
+            "options": {
+                "num_predict": 100,
+                "temperature": 0.2
+            }
+        },
+        timeout=300
+    )
 
-        text = getattr(
-            doc,
-            "page_content",
-            str(doc)
-        )
+    response.raise_for_status()
 
-        if len(text) > 500:
-            text = text[:500] + "..."
+    keywords = response.json()["response"].strip()
 
-        format_vertical_text(text)
+    print("\n===== EXTRACTED KEYWORDS =====")
+    print(keywords)
 
-        metadata = getattr(
-            doc,
-            "metadata",
-            {}
-        )
-
-        if metadata:
-
-            if "source" in metadata:
-                print(
-                    "Source:",
-                    metadata["source"]
-                )
-
-            if "url" in metadata:
-                print(
-                    "URL:",
-                    metadata["url"]
-                )
-
-        print()
+    return keywords

@@ -1,20 +1,74 @@
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
 from backend.admin.route import auth, users
 from backend.db.pgdatabase import Base,engine,SessionLocal
 from backend.models.models import User,Note as NoteModel, UserClass
 from backend.admin.security import verify_password, create_access_token,SECRET_KEY,ALGORITHM
-
+from fastapi import FastAPI
 from pydantic import BaseModel
 
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
 import psycopg2
 import os
+app = FastAPI()
+import sqlite3
+from pathlib import Path
 
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+DB_PATH = BASE_DIR / "data" / "database.sqlite3"
+
+def get_db_connection():
+    print("DB FILE:", DB_PATH)
+
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+
+    return conn
+
+
+def fetch_teacher_entries(school, start_date, end_date):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Debug: show available tables
+    cursor.execute("""
+        SELECT name
+        FROM sqlite_master
+        WHERE type='table'
+    """)
+    print("Tables:", [row[0] for row in cursor.fetchall()])
+
+    query = """
+    SELECT
+        Username,
+        School,
+        Grade,
+        What_I_prepared,
+        What_I_did_well,
+        What_went_well,
+        Where_to_improve,
+        Created_date,
+        What_homework_did_I_give_today
+    FROM Notes_notes
+    WHERE School = ?
+    AND Created_date BETWEEN ? AND ?
+    """
+
+    cursor.execute(
+        query,
+        (school, start_date, end_date)
+    )
+
+    rows = cursor.fetchall()
+
+    conn.close()
+
+    return rows
 # ================= APP ===================
 
 app = FastAPI()
@@ -61,11 +115,6 @@ def get_db():
         password="aiat"
     )
 
-# ================ ADMIN ================
-
-app.include_router(auth.router, prefix="/auth", tags=["Admin"])
-app.include_router(users.router, prefix="/users", tags=["Admin"])
-
 
 # Backwards-compatible alias: preserve old /login path used by some frontend builds
 @app.post("/login")
@@ -109,16 +158,14 @@ class LoginRequest(BaseModel):
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
-
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+
         username = payload.get("sub")
 
         if not username:
             raise HTTPException(status_code=401, detail="Invalid token")
 
-        # Return the full payload (contains `sub` and `role`) so downstream
-        # dependencies can inspect role/sub as needed.
         return payload
 
     except JWTError:
@@ -126,7 +173,6 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or expired token"
         )
-    
 #================== AUTH  =================
 
 app.include_router(auth.router, prefix="/auth", tags=["Auth"])
@@ -136,9 +182,7 @@ app.include_router(users.router, prefix="/users", tags=["Users"])
 @app.post("/user-login")
 def user_login(data: LoginRequest):
 
-    db = SessionLocal()
-    user = db.query(User).filter(User.username == data.username).first()
-
+    
     db = SessionLocal()
     user = db.query(User).filter(User.username == data.username).first()
 
@@ -155,37 +199,45 @@ def user_login(data: LoginRequest):
 
 
 @app.get("/dashboard")
-def dashboard(user: str = Depends(get_current_user)):
+def dashboard(user: dict = Depends(get_current_user)):
 
     db = SessionLocal()
 
-    db_user = db.query(User).filter(User.username == user).first()
+    username = user["sub"]
+
+    db_user = db.query(User).filter(
+        User.username == username
+    ).first()
+
+    if not db_user:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
 
     classes = db.query(UserClass).filter(
         UserClass.user_id == db_user.id
     ).all()
 
-
     return {
         "username": db_user.full_name,
-        "profile_image": db_user.photo_path,   # stored image path
-        "classes": [
-            {"school": c.school, "grade": c.grade}
-            for c in classes
-        ]
+        "profile_image": db_user.photo_path,
+        "classes": []
     }
-
 # ================= SAVE =================
 
 @app.post("/write")
-def save_note(note: NoteCreate, user: str = Depends(get_current_user)):
+def save_note(note: NoteCreate, user: dict = Depends(get_current_user)):
 
     db = SessionLocal()
 
-    db_user = db.query(User).filter(User.username == user).first()
+    username = user["sub"]
 
+    db_user = db.query(User).filter(
+        User.username == username
+    ).first()
     new_note = NoteModel(
-        username=user,
+        username=username,
         user_id=db_user.id,
         school=note.school,
         grade=note.grade,
@@ -207,31 +259,28 @@ def save_note(note: NoteCreate, user: str = Depends(get_current_user)):
 # ================= GET ALL =================
 
 @app.get("/notes", response_model=list[NoteResponse])
-def get_all_notes(user: str = Depends(get_current_user)):
+def get_all_notes(user: dict = Depends(get_current_user)):
 
     db = SessionLocal()
-    notes = db.query(NoteModel).order_by(NoteModel.created_date.desc()).all()
-    return notes
 
+    notes = (
+        db.query(NoteModel)
+        .order_by(NoteModel.created_date.desc())
+        .all()
+    )
+
+    return notes
 
 # ================= DATE FILTER =================
 
-@app.get("/notes-by-date", response_model=list[NoteResponse])
-def get_notes_by_date(from_date: str, to_date: str,user: str = Depends(get_current_user)):
-
-    db = SessionLocal()
-
-    db_user = db.query(User).filter(User.username == user).first()
-
-    notes = db.query(NoteModel).filter(
-        NoteModel.created_date.between(from_date, to_date)
-    ).order_by(NoteModel.created_date.desc()).all()
-
-    return notes
+#def get_notes_by_date(
+    #from_date: str,
+    #to_date: str,
+    #user: dict = Depends(get_current_user)
+#):
 
 
 # ================= GET ONE =================
-
 @app.get("/notes/{id}", response_model=NoteResponse)
 def get_note(id: int, user: str = Depends(get_current_user)):
 
@@ -294,7 +343,18 @@ def delete_note(id: int, user: str = Depends(get_current_user)):
 
     return {"message": "Deleted"}
 
+@app.get("/")
+def serve_frontend():
 
+    index_file = os.path.join(
+        FRONTEND_PATH,
+        "index.html"
+    )
+
+    if os.path.exists(index_file):
+        return FileResponse(index_file)
+
+    return {"message": "Frontend not built"}
 # ================= REACT ROUTER FIX =================
 # IMPORTANT: Keep this at bottom
 
