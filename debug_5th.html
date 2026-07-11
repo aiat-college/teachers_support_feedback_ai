@@ -1,0 +1,264 @@
+<!DOCTYPE html><html><head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>STEMLAND</title>
+    <style>
+        .container{
+            display:flex;
+        }
+        .sideSection{
+            background-color:#ADD8E6;
+            width:50%;
+        }
+        .mainSection{
+            background-color:orange;
+            width:100%;
+        }
+        .header{
+            background-color:rgb(134, 73, 45);
+            display:flex;
+        }
+        .header-title{
+            width:100%;
+        }
+        .header-user{
+            width:50%;
+            text-align: right;
+        }
+        .header-title-a{
+            color: #ffffff;
+            text-decoration: none;
+            padding: 20px 20px 20px 40px;
+            font-size: 3rem;
+        }
+    </style></head>
+    
+
+	<body>
+	        <div class="header">
+	            <div class="header-title">
+	                <h1><a class="header-title-a" href="/">STEMLAND</a></h1>
+	            </div>
+	            <div class="header-user">
+	                <h2 style="color: #ffffff; padding: 40px 20px 10px 20px;">
+	                    
+	                    <small> (<a href="/accounts/login/" style="text-decoration: none; color: #98e6fa;"> Log in </a>) </small>
+	                    <small> (<a href="/signup" style="text-decoration: none; color: #98e6fa;"> Sign Up </a>) </small>
+	                    
+	                </h2>
+	            </div>
+	        </div>
+	        <div>
+				
+
+
+
+	
+		<style>
+        	table, th, td
+        	{
+        	border: 1px solid black;
+        	text-align: left;
+        	}
+		</style>
+		<h2 style="text-align: center;">5th grade of Isaiambalam school Teachers Notes</h2>
+		<form method="get">
+
+            <input type="hidden" name="School" value="Isaiambalam">
+            <input type="hidden" name="Grade" value="5th">
+            <input type="hidden" name="From_date" value="2026-07-06">
+            <input type="hidden" name="To_date" value="2026-07-11">
+
+            <label><b>Filter by Name:</b></label>
+            <select name="name" onchange="this.form.submit()">
+                <option value="">All</option>
+                
+                    <option value="Kethsiyaal">
+                        Kethsiyaal
+                    </option>
+                
+                    <option value="Poonguzhali">
+                        Poonguzhali
+                    </option>
+                
+                    <option value="SandhiyaBala">
+                        SandhiyaBala
+                    </option>
+                
+                    <option value="Vaishnavi">
+                        Vaishnavi
+                    </option>
+                
+            </select>
+
+        </form>
+		<table width="100%">
+			  <tbody><tr>
+				  <th>Date</th>
+				  <th>Name</th>
+				  <th>What I prepared for class</th>
+				  <th>What I did well</th>
+				  <th>What went well</th>
+				  <th>Where to improve</th>
+				  <th>What homework did I give today</th>
+			  </tr>
+			  
+				  <tr>
+					  <td> July 6, 2026 </td>
+					  <td> SandhiyaBala </td>
+					  <td> Journey of water- dirty water, where its going </td>
+					  <td> before explain this topics, show teh Pallaru River issue video and explain why the river got spoiled due to the leather industries and chemical industries. Children got the awareness not throwing the platics and food in the river. </td>
+					  <td> bring awareness went well </td>
+					  <td> compelte thier homewrok regularly </td>
+					  <td> summarize whatever we discussed in class. </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9774/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9774/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="aClsVWCtan636Y3tbruwFx0BbcsAEfKdtMEWLfJC6Sh2OiFCli0WfLKKuNVCWGkC">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 7, 2026 </td>
+					  <td> Poonguzhali </td>
+					  <td> area and perimeter </td>
+					  <td> I demonstrated how to find the area by counting square units and relating it to rows and columns. I gave tasks to create squares with a given area </td>
+					  <td> Children created squares with the given area in Polypad. </td>
+					  <td> - </td>
+					  <td> Given area = 36 square </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9781/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9781/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="aClsVWCtan636Y3tbruwFx0BbcsAEfKdtMEWLfJC6Sh2OiFCli0WfLKKuNVCWGkC">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 8, 2026 </td>
+					  <td> SandhiyaBala </td>
+					  <td> Tables and Arithmetic Quiz </td>
+					  <td> conduct the multiplication tables and arthimetic stories quiz. to check how fast children tell teh answer </td>
+					  <td> quiz went well </td>
+					  <td> concentration the question </td>
+					  <td> Give 10 arithmetic stories to find the answer </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9773/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9773/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="aClsVWCtan636Y3tbruwFx0BbcsAEfKdtMEWLfJC6Sh2OiFCli0WfLKKuNVCWGkC">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 9, 2026 </td>
+					  <td> Kethsiyaal </td>
+					  <td> Palm tree drawing </td>
+					  <td> Step by step </td>
+					  <td> with shapes </td>
+					  <td> - </td>
+					  <td> - </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9761/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9761/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="aClsVWCtan636Y3tbruwFx0BbcsAEfKdtMEWLfJC6Sh2OiFCli0WfLKKuNVCWGkC">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 9, 2026 </td>
+					  <td> SandhiyaBala </td>
+					  <td> Area using diens blocks </td>
+					  <td> Explain what an area is and where we use it. give few examples and explain how to find the area, and find the area of our classroom material, notes, titles, box, </td>
+					  <td> The example and finding the area around our class went well. </td>
+					  <td> complete the homework regularly </td>
+					  <td> give 10 sums to find the area using formulas </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9770/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9770/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="aClsVWCtan636Y3tbruwFx0BbcsAEfKdtMEWLfJC6Sh2OiFCli0WfLKKuNVCWGkC">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 10, 2026 </td>
+					  <td> Vaishnavi </td>
+					  <td> Support- Benefits of dam, disadvantages of dams and about water spring. </td>
+					  <td> Sharing general knowledge about oldest dam, largest dam and smallest dam in the world. </td>
+					  <td> Students enjoyed knowing beyond books. </td>
+					  <td> Observing around them, in their own village and asking questions. </td>
+					  <td> Reasons behind spring water. </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9745/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9745/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="aClsVWCtan636Y3tbruwFx0BbcsAEfKdtMEWLfJC6Sh2OiFCli0WfLKKuNVCWGkC">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 10, 2026 </td>
+					  <td> Vaishnavi </td>
+					  <td> Catch the apple snap program continuation and played games. </td>
+					  <td> Organizing the peer learning. </td>
+					  <td> Helping each other. </td>
+					  <td> - </td>
+					  <td> - </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9753/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9753/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="aClsVWCtan636Y3tbruwFx0BbcsAEfKdtMEWLfJC6Sh2OiFCli0WfLKKuNVCWGkC">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 10, 2026 </td>
+					  <td> SandhiyaBala </td>
+					  <td> uses of Dams and how Natural springs work- book chapter- Journey of river </td>
+					  <td> explain already in the book, and show the videos about both uses and casues and explain how the natural springs works and children can see the natural springs, and children didn't explore how the natural speings is it. </td>
+					  <td> videos and children didn't believe the natural springs, so ask children to gather information about this in thier parents </td>
+					  <td> nil </td>
+					  <td> summarize the video notes </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9769/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9769/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="aClsVWCtan636Y3tbruwFx0BbcsAEfKdtMEWLfJC6Sh2OiFCli0WfLKKuNVCWGkC">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+		</tbody></table>
+	
+
+			</div>
+
+	
+
+</body></html>

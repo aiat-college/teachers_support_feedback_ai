@@ -1,0 +1,242 @@
+<!DOCTYPE html><html><head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>STEMLAND</title>
+    <style>
+        .container{
+            display:flex;
+        }
+        .sideSection{
+            background-color:#ADD8E6;
+            width:50%;
+        }
+        .mainSection{
+            background-color:orange;
+            width:100%;
+        }
+        .header{
+            background-color:rgb(134, 73, 45);
+            display:flex;
+        }
+        .header-title{
+            width:100%;
+        }
+        .header-user{
+            width:50%;
+            text-align: right;
+        }
+        .header-title-a{
+            color: #ffffff;
+            text-decoration: none;
+            padding: 20px 20px 20px 40px;
+            font-size: 3rem;
+        }
+    </style></head>
+    
+
+	<body>
+	        <div class="header">
+	            <div class="header-title">
+	                <h1><a class="header-title-a" href="/">STEMLAND</a></h1>
+	            </div>
+	            <div class="header-user">
+	                <h2 style="color: #ffffff; padding: 40px 20px 10px 20px;">
+	                    
+	                    <small> (<a href="/accounts/login/" style="text-decoration: none; color: #98e6fa;"> Log in </a>) </small>
+	                    <small> (<a href="/signup" style="text-decoration: none; color: #98e6fa;"> Sign Up </a>) </small>
+	                    
+	                </h2>
+	            </div>
+	        </div>
+	        <div>
+				
+
+
+
+	
+		<style>
+        	table, th, td
+        	{
+        	border: 1px solid black;
+        	text-align: left;
+        	}
+		</style>
+		<h2 style="text-align: center;">7th grade of Isaiambalam school Teachers Notes</h2>
+		<form method="get">
+
+            <input type="hidden" name="School" value="Isaiambalam">
+            <input type="hidden" name="Grade" value="7th">
+            <input type="hidden" name="From_date" value="2026-07-06">
+            <input type="hidden" name="To_date" value="2026-07-11">
+
+            <label><b>Filter by Name:</b></label>
+            <select name="name" onchange="this.form.submit()">
+                <option value="">All</option>
+                
+                    <option value="Ajay">
+                        Ajay
+                    </option>
+                
+                    <option value="Poonguzhali">
+                        Poonguzhali
+                    </option>
+                
+                    <option value="Vaishnavi">
+                        Vaishnavi
+                    </option>
+                
+            </select>
+
+        </form>
+		<table width="100%">
+			  <tbody><tr>
+				  <th>Date</th>
+				  <th>Name</th>
+				  <th>What I prepared for class</th>
+				  <th>What I did well</th>
+				  <th>What went well</th>
+				  <th>Where to improve</th>
+				  <th>What homework did I give today</th>
+			  </tr>
+			  
+				  <tr>
+					  <td> July 7, 2026 </td>
+					  <td> Ajay </td>
+					  <td> Math: Decimal numbers. </td>
+					  <td> Begin Why we need decimal numbers. Answers where like To measurement accurately and to measure small items like screw. </td>
+					  <td> Children were able to measure small objects given in the book with scale and enter values in cm. And learning about tenths part. </td>
+					  <td> - </td>
+					  <td> Homework on finding the measurement for given items in book. </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9771/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9771/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="baqbdK1Iht6o2WG3xamf2a47EQe4WI4sukJF338RdYhnKgicH1SFCoOgXrH6e9ER">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 7, 2026 </td>
+					  <td> Ajay </td>
+					  <td> Math: Decimal numbers. </td>
+					  <td> Begin Why we need decimal numbers. Answers where like To measurement accurately and to measure small items like screw. </td>
+					  <td> Children were able to measure small objects given in the book with scale and enter values in cm. And learning about tenths part. </td>
+					  <td> - </td>
+					  <td> Homework on finding the measurement for given items in book. </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9772/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9772/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="baqbdK1Iht6o2WG3xamf2a47EQe4WI4sukJF338RdYhnKgicH1SFCoOgXrH6e9ER">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 8, 2026 </td>
+					  <td> Vaishnavi </td>
+					  <td> students wanted to do Palm craft.
+Students made rose and mat. </td>
+					  <td> - </td>
+					  <td> 6th, 7th and 8th grade helped each other and learnt together. </td>
+					  <td> - </td>
+					  <td> - </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9701/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9701/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="baqbdK1Iht6o2WG3xamf2a47EQe4WI4sukJF338RdYhnKgicH1SFCoOgXrH6e9ER">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 8, 2026 </td>
+					  <td> Ajay </td>
+					  <td> Math: Decimal numbers </td>
+					  <td> Understanding of tenths and addition and subtraction of tenths represent in fraction based on word problem. </td>
+					  <td> Finding the measurement of give items in the book along with scale. </td>
+					  <td> - </td>
+					  <td> Homework based on arranging the given length in increasing order. </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9768/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9768/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="baqbdK1Iht6o2WG3xamf2a47EQe4WI4sukJF338RdYhnKgicH1SFCoOgXrH6e9ER">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 9, 2026 </td>
+					  <td> Ajay </td>
+					  <td> Math: Decimal numbers. </td>
+					  <td> The children learned about hundredths. They practiced measuring the given wire lengths from the textbook wrote the measurements correctly and write the measurements in words. </td>
+					  <td> Activity on marking the given length on scale given in the text book went well. </td>
+					  <td> - </td>
+					  <td> Asked them to complete sums in book to mark the given length on scale. </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9748/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9748/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="baqbdK1Iht6o2WG3xamf2a47EQe4WI4sukJF338RdYhnKgicH1SFCoOgXrH6e9ER">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 9, 2026 </td>
+					  <td> Poonguzhali </td>
+					  <td> Decimal Numbers </td>
+					  <td> I guided children in using decimal values, such as 1.5, to move the sprite accurately. </td>
+					  <td> Children understood how to use decimal numbers to control the sprite movement. </td>
+					  <td> - </td>
+					  <td> - </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9779/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9779/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="baqbdK1Iht6o2WG3xamf2a47EQe4WI4sukJF338RdYhnKgicH1SFCoOgXrH6e9ER">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 10, 2026 </td>
+					  <td> Ajay </td>
+					  <td> EVS: Electricity and circuits. </td>
+					  <td> Children learn about open and closed circuits. Worked on book questions. </td>
+					  <td> Identifying LED/lamp glows based on scenarios in a circuits went well. </td>
+					  <td> - </td>
+					  <td> Homework on completing the book questions and A scenario is given to list out what are the things that they can't do if there is no electricity for a week. </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9747/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9747/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="baqbdK1Iht6o2WG3xamf2a47EQe4WI4sukJF338RdYhnKgicH1SFCoOgXrH6e9ER">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+		</tbody></table>
+	
+
+			</div>
+
+	
+
+</body></html>

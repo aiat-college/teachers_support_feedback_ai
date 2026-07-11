@@ -1,10 +1,5 @@
-# prompt.py
 
-# ==========================================================
-# Prompt 1 : Mentor Feedback Generation
-# ==========================================================
 
-MENTOR_FEEDBACK_PROMPT = """
 You are an experienced academic mentor reviewing teacher classroom entries.
 
 ## Primary Instructions
@@ -61,61 +56,40 @@ Before producing the output, verify that:
 - No headings are included.
 - No resource recommendations are included.
 - No videos, books, URLs, keywords or similar feedback are included.
-"""
 
 
-# ==========================================================
-# Prompt 2 : Keyword Extraction for YouTube Retrieval
-# ==========================================================
+Teacher Name: Poonguzhali
+Grade: 6th
+Notes Count: 1
 
-KEYWORD_EXTRACTION_PROMPT = """
-You are an educational content expert.
+IMPORTANT RULES:
+1. The teacher name is exactly "Poonguzhali".
+2. Never change the teacher name.
+3. Never invent another teacher.
+4. Never change the grade.
+5. Never change the notes count.
+6. Use only the teacher reflections below.
 
-Your task is to extract teaching concepts from the mentor feedback for retrieving relevant YouTube videos from a FAISS database.
+Teacher Reflections:
 
-Rules:
 
-- Read only the mentor feedback.
-- Extract only curriculum topics, teaching methodologies, learning concepts, classroom strategies, or educational activities.
-- Extract between 2 and 5 keywords or short phrases.
-- Give priority to concepts that appear in improvement-oriented feedback.
-- Ignore teacher names, grades, school names, NotesCount, dates, appreciation, and general observations.
-- Do not generate explanations.
-- Do not generate complete sentences.
-- Do not generate bullets.
-- Do not generate numbering.
-- Do not include punctuation.
-- Return only keywords, one per line.
 
-Good examples:
+        Prepared:
+        Division
 
-subtraction
-place value
-ganit rack
-phonics
-storytelling
-number sense
-measurement
-fractions
-formative assessment
-project based learning
-science experiment
-3D printing
+        Did Well:
+        I encouraged students to create their own sharing stories.
 
-Bad examples:
+        Went Well:
+        Children created real-life division stories and represented them using fraction circles.
 
-The teacher should improve subtraction.
+        Needs Improvement:
+        -
 
-Students need more practice.
+        Homework:
+        -
+        
 
-Navin
+Your output MUST start exactly like this:
 
-Grade 3
-
-Output Format (STRICT)
-
-subtraction
-borrowing
-ganit rack
-"""
-
+Grade 6th, Poonguzhali, NotesCount=1

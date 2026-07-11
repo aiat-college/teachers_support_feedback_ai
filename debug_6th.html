@@ -1,0 +1,260 @@
+<!DOCTYPE html><html><head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>STEMLAND</title>
+    <style>
+        .container{
+            display:flex;
+        }
+        .sideSection{
+            background-color:#ADD8E6;
+            width:50%;
+        }
+        .mainSection{
+            background-color:orange;
+            width:100%;
+        }
+        .header{
+            background-color:rgb(134, 73, 45);
+            display:flex;
+        }
+        .header-title{
+            width:100%;
+        }
+        .header-user{
+            width:50%;
+            text-align: right;
+        }
+        .header-title-a{
+            color: #ffffff;
+            text-decoration: none;
+            padding: 20px 20px 20px 40px;
+            font-size: 3rem;
+        }
+    </style></head>
+    
+
+	<body>
+	        <div class="header">
+	            <div class="header-title">
+	                <h1><a class="header-title-a" href="/">STEMLAND</a></h1>
+	            </div>
+	            <div class="header-user">
+	                <h2 style="color: #ffffff; padding: 40px 20px 10px 20px;">
+	                    
+	                    <small> (<a href="/accounts/login/" style="text-decoration: none; color: #98e6fa;"> Log in </a>) </small>
+	                    <small> (<a href="/signup" style="text-decoration: none; color: #98e6fa;"> Sign Up </a>) </small>
+	                    
+	                </h2>
+	            </div>
+	        </div>
+	        <div>
+				
+
+
+
+	
+		<style>
+        	table, th, td
+        	{
+        	border: 1px solid black;
+        	text-align: left;
+        	}
+		</style>
+		<h2 style="text-align: center;">6th grade of Isaiambalam school Teachers Notes</h2>
+		<form method="get">
+
+            <input type="hidden" name="School" value="Isaiambalam">
+            <input type="hidden" name="Grade" value="6th">
+            <input type="hidden" name="From_date" value="2026-07-06">
+            <input type="hidden" name="To_date" value="2026-07-11">
+
+            <label><b>Filter by Name:</b></label>
+            <select name="name" onchange="this.form.submit()">
+                <option value="">All</option>
+                
+                    <option value="Aarthi">
+                        Aarthi
+                    </option>
+                
+                    <option value="Poonguzhali">
+                        Poonguzhali
+                    </option>
+                
+                    <option value="Vaishnavi">
+                        Vaishnavi
+                    </option>
+                
+            </select>
+
+        </form>
+		<table width="100%">
+			  <tbody><tr>
+				  <th>Date</th>
+				  <th>Name</th>
+				  <th>What I prepared for class</th>
+				  <th>What I did well</th>
+				  <th>What went well</th>
+				  <th>Where to improve</th>
+				  <th>What homework did I give today</th>
+			  </tr>
+			  
+				  <tr>
+					  <td> July 6, 2026 </td>
+					  <td> Aarthi </td>
+					  <td> Math: Patterns in Mathematics </td>
+					  <td> I taught students how to find the nth term of an arithmetic sequence using the formula and guided them in solving related problems. </td>
+					  <td> Students cooperated well throughout the lesson. </td>
+					  <td> - </td>
+					  <td> Give three problems on finding the nth term of an arithmetic sequence. </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9706/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9706/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="DYpsnyRC1RtgKTFBEZPyp0Jnv0K2TbHFW8IWdRYLXmEfsdhKOQlYZetwOBd4bCh4">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 7, 2026 </td>
+					  <td> Vaishnavi </td>
+					  <td> Palm crafts </td>
+					  <td> - </td>
+					  <td> Students helped each other. </td>
+					  <td> - </td>
+					  <td> Complete the left over. </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9692/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9692/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="DYpsnyRC1RtgKTFBEZPyp0Jnv0K2TbHFW8IWdRYLXmEfsdhKOQlYZetwOBd4bCh4">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 7, 2026 </td>
+					  <td> Aarthi </td>
+					  <td> Math: Patterns in Mathematics </td>
+					  <td> Today, I introduced the concept of variables and explained the BODMAS rule to prepare students for learning algebra. </td>
+					  <td> The class was interactive and went well. </td>
+					  <td> - </td>
+					  <td> I gave five BODMAS problems for practice. </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9707/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9707/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="DYpsnyRC1RtgKTFBEZPyp0Jnv0K2TbHFW8IWdRYLXmEfsdhKOQlYZetwOBd4bCh4">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 7, 2026 </td>
+					  <td> Aarthi </td>
+					  <td> Social: Locating places on the Earth </td>
+					  <td> Today, students learnt about the Madhya Rekha, where it passes, and its importance in calculating Indian Standard Time . They also learnt how ancient Indian mathematicians and astronomers used the Standard Meridian and astronomical observations to measure time accurately and make calculations. </td>
+					  <td> - </td>
+					  <td> - </td>
+					  <td> - </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9712/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9712/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="DYpsnyRC1RtgKTFBEZPyp0Jnv0K2TbHFW8IWdRYLXmEfsdhKOQlYZetwOBd4bCh4">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 8, 2026 </td>
+					  <td> Aarthi </td>
+					  <td> Math: Patterns in Mathematics </td>
+					  <td> I checked the students' homework and found that many of them had misunderstood the division part. Since most students were unable to solve the division questions, I revised the concept of division. </td>
+					  <td> - </td>
+					  <td> Many students were hesitant to solve division sums. </td>
+					  <td> I gave 6 division sums for practice </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9711/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9711/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="DYpsnyRC1RtgKTFBEZPyp0Jnv0K2TbHFW8IWdRYLXmEfsdhKOQlYZetwOBd4bCh4">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 8, 2026 </td>
+					  <td> Aarthi </td>
+					  <td> Science: Diversity in the living world </td>
+					  <td> Today, I conducted a class test in the classroom. </td>
+					  <td> - </td>
+					  <td> - </td>
+					  <td> - </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9713/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9713/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="DYpsnyRC1RtgKTFBEZPyp0Jnv0K2TbHFW8IWdRYLXmEfsdhKOQlYZetwOBd4bCh4">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 8, 2026 </td>
+					  <td> Poonguzhali </td>
+					  <td> Division </td>
+					  <td> I encouraged students to create their own sharing stories. </td>
+					  <td> Children created real-life division stories and represented them using fraction circles. </td>
+					  <td> - </td>
+					  <td> - </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9780/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9780/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="DYpsnyRC1RtgKTFBEZPyp0Jnv0K2TbHFW8IWdRYLXmEfsdhKOQlYZetwOBd4bCh4">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 9, 2026 </td>
+					  <td> Aarthi </td>
+					  <td> social: Locating places on the earth </td>
+					  <td> I conducted a classroom quiz game where each student created a question from the chapter and asked it to the class. Students earned marks for answering correctly, and the student who asked an unanswered question also received a mark. </td>
+					  <td> The students' enthusiasm and observation skills improved. </td>
+					  <td> - </td>
+					  <td> I asked the students to write a summary of what they learnt from this chapter. </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9710/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9710/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="DYpsnyRC1RtgKTFBEZPyp0Jnv0K2TbHFW8IWdRYLXmEfsdhKOQlYZetwOBd4bCh4">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+		</tbody></table>
+	
+
+			</div>
+
+	
+
+</body></html>

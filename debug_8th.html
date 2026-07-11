@@ -1,0 +1,222 @@
+<!DOCTYPE html><html><head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>STEMLAND</title>
+    <style>
+        .container{
+            display:flex;
+        }
+        .sideSection{
+            background-color:#ADD8E6;
+            width:50%;
+        }
+        .mainSection{
+            background-color:orange;
+            width:100%;
+        }
+        .header{
+            background-color:rgb(134, 73, 45);
+            display:flex;
+        }
+        .header-title{
+            width:100%;
+        }
+        .header-user{
+            width:50%;
+            text-align: right;
+        }
+        .header-title-a{
+            color: #ffffff;
+            text-decoration: none;
+            padding: 20px 20px 20px 40px;
+            font-size: 3rem;
+        }
+    </style></head>
+    
+
+	<body>
+	        <div class="header">
+	            <div class="header-title">
+	                <h1><a class="header-title-a" href="/">STEMLAND</a></h1>
+	            </div>
+	            <div class="header-user">
+	                <h2 style="color: #ffffff; padding: 40px 20px 10px 20px;">
+	                    
+	                    <small> (<a href="/accounts/login/" style="text-decoration: none; color: #98e6fa;"> Log in </a>) </small>
+	                    <small> (<a href="/signup" style="text-decoration: none; color: #98e6fa;"> Sign Up </a>) </small>
+	                    
+	                </h2>
+	            </div>
+	        </div>
+	        <div>
+				
+
+
+
+	
+		<style>
+        	table, th, td
+        	{
+        	border: 1px solid black;
+        	text-align: left;
+        	}
+		</style>
+		<h2 style="text-align: center;">8th grade of Isaiambalam school Teachers Notes</h2>
+		<form method="get">
+
+            <input type="hidden" name="School" value="Isaiambalam">
+            <input type="hidden" name="Grade" value="8th">
+            <input type="hidden" name="From_date" value="2026-07-06">
+            <input type="hidden" name="To_date" value="2026-07-11">
+
+            <label><b>Filter by Name:</b></label>
+            <select name="name" onchange="this.form.submit()">
+                <option value="">All</option>
+                
+                    <option value="Poonguzhali">
+                        Poonguzhali
+                    </option>
+                
+                    <option value="Sivaguru">
+                        Sivaguru
+                    </option>
+                
+                    <option value="Vaishnavi">
+                        Vaishnavi
+                    </option>
+                
+            </select>
+
+        </form>
+		<table width="100%">
+			  <tbody><tr>
+				  <th>Date</th>
+				  <th>Name</th>
+				  <th>What I prepared for class</th>
+				  <th>What I did well</th>
+				  <th>What went well</th>
+				  <th>Where to improve</th>
+				  <th>What homework did I give today</th>
+			  </tr>
+			  
+				  <tr>
+					  <td> July 6, 2026 </td>
+					  <td> Sivaguru </td>
+					  <td> Maths: Cube numbers </td>
+					  <td> Introduced about the cube using squares and solved problems using shortcuts. </td>
+					  <td> Children understand the problem as it is relevant to square numbers </td>
+					  <td> Need to practice more problems and understand more on place values </td>
+					  <td> Given a few problems for solving </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9687/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9687/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="YVrcCuRuxpWWRnXHZoWkWMsTTVTUAbLnh5KGsNYDtU7VzHzQ9fsKw0c2cwmWSClM">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 7, 2026 </td>
+					  <td> Sivaguru </td>
+					  <td> - </td>
+					  <td> Made children practice more problems on cube numbers. </td>
+					  <td> Few children solved well </td>
+					  <td> A few are struggling with multiplication and place value. </td>
+					  <td> Given a few problems to solve. </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9722/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9722/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="YVrcCuRuxpWWRnXHZoWkWMsTTVTUAbLnh5KGsNYDtU7VzHzQ9fsKw0c2cwmWSClM">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 8, 2026 </td>
+					  <td> Sivaguru </td>
+					  <td> (a+b)^3 activity </td>
+					  <td> Explained to children about how to create boxes using art paper. Children were eagerly working on the project. </td>
+					  <td> Children were able to understand the 3D model of any length. </td>
+					  <td> - </td>
+					  <td> Given a few problems for solving </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9723/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9723/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="YVrcCuRuxpWWRnXHZoWkWMsTTVTUAbLnh5KGsNYDtU7VzHzQ9fsKw0c2cwmWSClM">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 9, 2026 </td>
+					  <td> Vaishnavi </td>
+					  <td> Palm Craft- Pen stand, Cup and rose. </td>
+					  <td> Group project, separated teams. </td>
+					  <td> Group lead supporting others in learning. </td>
+					  <td> - </td>
+					  <td> - </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9705/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9705/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="YVrcCuRuxpWWRnXHZoWkWMsTTVTUAbLnh5KGsNYDtU7VzHzQ9fsKw0c2cwmWSClM">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 9, 2026 </td>
+					  <td> Sivaguru </td>
+					  <td> - </td>
+					  <td> Cubic numbers practice </td>
+					  <td> Children were able to solve better </td>
+					  <td> Need more practice </td>
+					  <td> Given a few problems for practicing </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9724/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9724/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="YVrcCuRuxpWWRnXHZoWkWMsTTVTUAbLnh5KGsNYDtU7VzHzQ9fsKw0c2cwmWSClM">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+				  <tr>
+					  <td> July 10, 2026 </td>
+					  <td> Poonguzhali </td>
+					  <td> Square number using PolyPad </td>
+					  <td> I demonstrated how to build square numbers with equal rows and columns. </td>
+					  <td> Children completed the task using PolyPad by arranging numbers in equal rows and columns to make square numbers. </td>
+					  <td> - </td>
+					  <td> (34)^2 </td>
+					  <td>
+						<!-- Edit button -->
+						<a href="/notes/edit/9778/" class="btn btn-primary">Edit</a>
+						<!-- Delete button with confirmation -->
+						<form method="POST" action="/notes/delete/9778/" style="display:inline;">
+							<input type="hidden" name="csrfmiddlewaretoken" value="YVrcCuRuxpWWRnXHZoWkWMsTTVTUAbLnh5KGsNYDtU7VzHzQ9fsKw0c2cwmWSClM">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</button>
+						</form>
+					</td>
+				  </tr>
+			  
+		</tbody></table>
+	
+
+			</div>
+
+	
+
+</body></html>

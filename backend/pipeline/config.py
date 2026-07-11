@@ -1,52 +1,74 @@
-# backend/config.py
-
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
-# ===============================
-# PROJECT ROOT
-# ===============================
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Project root folder
+BASE_DIR = Path(__file__).resolve().parents[2]
 
-# ===============================
-# DATA DIRECTORIES
-# ===============================
-DATA_DIR = BASE_DIR / "data"
+# Load .env
+env_path = BASE_DIR / ".env"
 
-PDF_DIR = DATA_DIR / "pdfs"
-TXT_DIR = DATA_DIR / "texts"
-VECTOR_DB_DIR = DATA_DIR / "vectorstore"
+print("Loading .env from:", env_path)
+print("Exists:", env_path.exists())
 
-# Create folders if not exist
-PDF_DIR.mkdir(parents=True, exist_ok=True)
-TXT_DIR.mkdir(parents=True, exist_ok=True)
-VECTOR_DB_DIR.mkdir(parents=True, exist_ok=True)
+load_dotenv(dotenv_path=env_path)
 
-# ===============================
-# INGESTION SETTINGS
-# ===============================
-CHUNK_SIZE = 1000
-CHUNK_OVERLAP = 200
+# =====================================================
+# WEBSITE CONFIGURATION
+# =====================================================
 
-# ===============================
-# EMBEDDINGS CONFIG
-# ===============================
-EMBEDDING_PROVIDER = "ollama"   # "ollama" | "openai"
+BASE_URL = "https://teachersnotes.pythonanywhere.com"
 
-OLLAMA_EMBED_MODEL = "nomic-embed-text"
+LOGIN_URL = f"{BASE_URL}/accounts/login/"
+SHOW_NOTES_URL = f"{BASE_URL}/ShowNotes"
+HOME_URL = BASE_URL
 
-# ===============================
-# VECTOR DB CONFIG
-# ===============================
-VECTOR_DB_TYPE = "chroma"
-COLLECTION_NAME = "teachers_notes"
+# =====================================================
+# LOGIN CREDENTIALS
+# =====================================================
 
-# ===============================
-# YOUTUBE CONFIG
-# ===============================
-YOUTUBE_LANGUAGE = "en"
+USERNAME = os.getenv("TEACHER_USERNAME")
+PASSWORD = os.getenv("TEACHER_PASSWORD")
 
-# ===============================
-# APP SETTINGS
-# ===============================
-APP_NAME = "AI Teachers Notes"
-APP_VERSION = "0.1.0"
+print("USERNAME =", repr(USERNAME))
+print("PASSWORD =", repr(PASSWORD))
+
+# =====================================================
+# SCHOOL → GRADE MAPPING
+# =====================================================
+
+SCHOOL_GRADES = {
+    "Udavi": [
+        "4th", "5th", "6th", "7th", "8th", "9th", "10th"
+    ],
+
+    "Isaiambalam": [
+        "1st", "2nd", "3rd", "4th", "5th",
+        "6th", "7th", "8th", "NIOS"
+    ],
+
+    "Government School": [
+        "Edayanchavady",
+        "Bommarpalayam",
+        "Kuyilappalayam"
+    ],
+
+    "AIAT": [
+        "Hindi",
+        "Applied Electronics & Chip Design year 1",
+        "Applied Electronics & Chip Design year 2",
+        "Green Energy & Electric System year 2",
+        "Software Development year 1",
+        "Software Development year 2",
+        "Software Development year 3"
+    ],
+
+    "Aikiyam": [
+        "9th",
+        "10th"
+    ],
+
+    "NES": [
+        "12th"
+    ]
+}
