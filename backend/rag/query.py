@@ -5,6 +5,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 import re
 import time
+
 from backend.rag.prompts import (
     MENTOR_FEEDBACK_PROMPT,
     KEYWORD_EXTRACTION_PROMPT,
@@ -419,7 +420,7 @@ Grade {grade}, {teacher}, NotesCount={notes_count}
 
         {youtube_videos}
         """
-
+         
         return final_output.strip()
 
     except requests.exceptions.Timeout:

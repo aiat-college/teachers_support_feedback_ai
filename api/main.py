@@ -2,15 +2,24 @@ from fastapi import FastAPI
 
 from api.models import RequestModel
 from api.teacher_master import load_teacher_master
+from backend.api.teacher_notes_api import(
+            router as teacher_router
+        )
 
 from backend.pipeline.scraper import fetch_teacher_notes
-from backend.pipeline.config import USERNAME, PASSWORD
+# from backend.pipeline.config import USERNAME, PASSWORD
 from backend.rag.query import generate_teacher_feedback
+from backend.services.teacher_notes_service import(
 
+            TeacherNotesService
+
+            )
 import traceback
 import time
 
 app = FastAPI()
+service = TeacherNotesService()
+app.include_router(teacher_router)
 # ------------------------------------
 # Grade Normalization Function
 # ------------------------------------
@@ -56,16 +65,22 @@ def generate_feedback(req: RequestModel):
         # Fetch Teacher Notes
         # -------------------------------------------------------
         t = time.time()
-        rows = fetch_teacher_notes(
-            username=USERNAME,
-            password=PASSWORD,
-            school=req.school,
-            from_date=req.start_date,
-            to_date=req.end_date,
-        )
-        print(f"✅ Fetch Teacher Notes : {time.time() - t:.2f} sec")
-        print("\n========== FETCHED TEACHER NOTES ==========")
+        # rows = fetch_teacher_notes(
+        #     username=USERNAME,
+        #     password=PASSWORD,
+        #     school=req.school,
+        #     from_date=req.start_date,
+        #     to_date=req.end_date,
+        # )
+        # print(f"✅ Fetch Teacher Notes : {time.time() - t:.2f} sec")
+        # print("\n========== FETCHED TEACHER NOTES ==========")
+        rows = service.get_teacher_notes(
 
+            school=req.school,
+            start_date=req.start_date,
+            end_date=req.end_date
+
+        )   
         teacher_summary = {}
 
         for r in rows:

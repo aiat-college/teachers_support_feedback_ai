@@ -17,7 +17,7 @@ load_dotenv(dotenv_path=env_path)
 # WEBSITE CONFIGURATION
 # =====================================================
 
-BASE_URL = "https://teachersnotes.pythonanywhere.com"
+BASE_URL = "https://teachersnotes.pythonanywhere.com/"
 
 LOGIN_URL = f"{BASE_URL}/accounts/login/"
 SHOW_NOTES_URL = f"{BASE_URL}/ShowNotes"
@@ -72,3 +72,26 @@ SCHOOL_GRADES = {
         "12th"
     ]
 }
+
+# =====================================================
+# FUTURE REST API CONFIGURATION
+# =====================================================
+
+API_VERSION = "v1"
+
+API_TIMEOUT = 30
+
+# This will be updated after the API is deployed.
+# Example:
+# https://teachersnotes.pythonanywhere.com
+
+API_BASE_URL = "https://teachersnotes.pythonanywhere.com/"
+
+# Example:
+# /api/v1/teacher-notes
+
+TEACHER_NOTES_ENDPOINT = "/api/v1/teacher-notes"
+
+# Future Authentication Support
+
+API_KEY = ""
