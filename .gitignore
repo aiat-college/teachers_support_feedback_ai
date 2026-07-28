@@ -4,5 +4,11 @@ frontend/
 vectorstore/
 __pycache__/
 *.pyc
+
+# Database files
 *.db
+*.sqlite3
+
+# Environment files
 .env
+.env.*
